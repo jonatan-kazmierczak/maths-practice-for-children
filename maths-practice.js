@@ -20,9 +20,11 @@ Optional parameter:
     process.exit(1)
 }
 
-function generateEquations(max) {
+const allowedMaxNumber = 100
+
+function generateEquations(maxNumber) {
     const equations = []
-    for (let i = 0; i <= max; i++)
+    for (let i = 0; i <= maxNumber; i++)
         for (let j = 0; j <= i; j++)
             equations.push( { v1: i, v2: j, attempts: 0 } )
     return equations
@@ -31,10 +33,11 @@ function generateEquations(max) {
 
 const argv = process.argv
 //console.log( argv )
-const maxNumber = +argv[2]
+let maxNumber = +argv[2]
 const attemptsLimit = +argv[3] || 10
 
 if (! maxNumber) usage()
+maxNumber = Math.min( maxNumber, allowedMaxNumber )
 
 const equations = generateEquations(maxNumber)
 const equationsCount = equations.length
