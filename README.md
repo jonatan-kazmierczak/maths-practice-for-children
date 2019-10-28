@@ -1,27 +1,72 @@
-# Mathematics practice program - 1st class
+# Mathematics practice program - primary school
 
 The program helps children in the 1st class of primary school (and above) to develop, train and improve their skills in mathematics.
 
 ## Info
-- current level: primary school, 1st class (or above)
-- scope: subtraction of numbers within the given range
+- current level: primary school, 1st class (and above)
+- scope: addition, subtraction and multiplication of numbers within the given range
 
-## Example
+## Usage examples
 
-Invocation:
+### Invocations
+* addition of numbers up to 50 (maximum value is 50 + 50), 5 tries  
 ```
-node maths-practice.js 20 10
+node maths-practice.js 50 + 5
 ```
 
-Result
+* subtraction of numbers up to 100 (maximum value is 100 - 0), 10 tries
 ```
+node maths-practice.js 100 - 10
+```
+
+* multiplication of numbers up to 10 (maximum value is 10 * 10), 5 tries
+```
+node maths-practice.js 10 "*" 5
+```
+
+### Result
+```
+  22
++ 49
+~~~~
+  71
+very good!
+
+
+  41
++  6
+~~~~
+  47
+very good!
+
+
+  46
++ 18
+~~~~
+  64
+very good!
+
+
+  18
++ 21
+~~~~
+  39
+very good!
+
+
+  20
++ 27
+~~~~
+  48
+not good
+
+
 ***********************************
-equations solved: 9
-attempts:  10
-success rate: 90 %
+solved correctly: 4
+attempts:  5
+success rate: 80 %
 ***********************************
 
-
-incorrect attempts (how many?):
-(1)  13 - 5 = 8
+Incorrect answers (1):
+20 + 27 = 47
 ```
