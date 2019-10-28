@@ -1,91 +1,88 @@
 /**
- * The program helps children in the 1st class of primary school (and above) to develop, train and improve their skills in mathematics
- * - subtraction.
+ * The program helps children in the 2nd class of primary school (and above) to develop, train and improve their skills in mathematics.
  *
  * @author Jonatan Kazmierczak [Jonatan (at) Son-of-God.info]
  */
 
+class Practice {
+    paramRange
+    operator
+    attemptsLimit
+    allowedOperators = [ '+', '-', '*' ]
+    
+    equations = []
+    wrongAnswers = []
+    attempts = 0
+    correctAnswers = 0
+    
+    constructor( paramRange, operator, attemptsLimit ) {
+        this.paramRange = paramRange
+        this.operator = operator
+        this.attemptsLimit = attemptsLimit
+    }
+    
+    isValid() {
+        return this.paramRange && this.attemptsLimit && this.allowedOperators.includes( this.operator )
+    }
+    
+    createNextEquation() {
+        if ( this.equations.length === this.attemptsLimit ) return undefined
+        const p1 = Math.round( Math.random() * this.paramRange )
+        const v2 = this.operator == '-' ? p1 : this.paramRange
+        const p2 = Math.round( Math.random() * v2 )
+        const eq = { p1: p1, p2: p2 }
+        this.equations.push( eq )
+        return eq
+    }
+    
+    evaluateEquation(eq) {
+        return eval( this.equationToString(eq) )
+    }
+    
+    equationToString(eq) {
+        return `${eq.p1} ${this.operator} ${eq.p2}`
+    }
+    
+    validateAnswer(answer) {
+        ++this.attempts
+        const eq = this.equations[ this.equations.length - 1 ]
+        const ok = this.evaluateEquation(eq) === answer
+        if (ok) ++this.correctAnswers
+        else this.wrongAnswers.push(eq)
+        return ok
+    }
+}
+
+// ----
+
 function usage() {
     const msg = `\
 
-ERROR: missing parameters.
+ERROR: missing or invalid parameters.
 
-Requred parameter:
-    maxNumber - defines range [0..maxNumber] for equations (i.e. 20)
+Required parameters:
+    parameterRange - defines range [0..parameterRange] for parameters of equations
+    operator - mathematical operator: + - *
+    attemptsLimit - number of equations to try
 
-Optional parameter:
-    attemptsLimit - number of equations to try (default = 10)
+Sample values:
+    50 - 5
+    10 "*" 5
 `
     console.error(msg)
     process.exit(1)
 }
 
-const allowedMaxNumber = 100
-
-function generateEquations(maxNumber) {
-    const equations = []
-    for (let i = 0; i <= maxNumber; i++)
-        for (let j = 0; j <= i; j++)
-            equations.push( { v1: i, v2: j, attempts: 0 } )
-    return equations
-}
-
-
-const argv = process.argv
-//console.log( argv )
-let maxNumber = +argv[2]
-const attemptsLimit = +argv[3] || 10
-
-if (! maxNumber) usage()
-maxNumber = Math.min( maxNumber, allowedMaxNumber )
-
-const equations = generateEquations(maxNumber)
-const equationsCount = equations.length
-const solvedEquations = []
-let currIdx = 0
-let currItem
-let attemptsTotal = 0
-
-function showMistakes(equations, attemptsThreshold) {
-    equations.filter( e => e.attempts > attemptsThreshold )
-             .forEach( e => console.log( `(${e.attempts - attemptsThreshold})  ${e.v1} - ${e.v2} = ${e.v1 - e.v2}` ) )
-}
-
-function finish() {
-    const summary = `\
-***********************************
-equations solved: ${solvedEquations.length}
-attempts:  ${attemptsTotal}
-success rate: ${ solvedEquations.length * 100 / attemptsTotal } %
-***********************************
-`
-    console.log( summary )
-    
-    if (solvedEquations.length < attemptsTotal) {
-        console.log( '\nincorrect attempts (how many?):' )
-        showMistakes( solvedEquations, 1 )
-        showMistakes( equations, 0 )
-    }
-    process.exit(0)
-}
-
-function nextEquation() {
-    const equationsLen = equations.length
-    if (!equationsLen || attemptsTotal == attemptsLimit) return finish()
-    currIdx = Math.round( Math.random() * ( equationsLen - 1 ) )
-    currItem = equations[ currIdx ]
-    ++currItem.attempts
-    ++attemptsTotal
-    console.log( '' + currItem.v1 + ' - ' + currItem.v2 + ' = ?' )
-}
+const args = process.argv.slice(2)
+const practice = new Practice( +args[0], args[1], +args[2] )
+if ( !practice.isValid() ) usage()
 
 function verify(input) {
     if (! /\d+/.test( input )) return  // prevention from accidental pressing enter
     let msg
-    if ( currItem.v1 - currItem.v2 == input ) {
+    const ok = practice.validateAnswer( +input )
+    if (ok) {
         msg = 'very good!'
-        solvedEquations.push( currItem )
-        equations.splice( currIdx, 1 )
     } else {
         msg = 'not good'
     }
@@ -94,10 +91,45 @@ function verify(input) {
     nextEquation()
 }
 
-const stdin = process.stdin
-stdin.resume()
-stdin.setEncoding("ascii")
-stdin.on("data", verify)
+function formatEquation(eq) {
+    const p1str = String( eq.p1 )
+    const p2str = String( eq.p2 )
+    const len = Math.max( p1str.length, p2str.length ) + 2
+    return `\
+${ p1str.padStart(len) }
+${ practice.operator } ${ p2str.padStart(len - 2) }
+${ '~'.repeat(len) }`
+}
 
-console.log(`${equationsCount} available equations\n`)
+function finish() {
+    const summary = `\
+***********************************
+solved correctly: ${practice.correctAnswers}
+attempts:  ${practice.attempts}
+success rate: ${ practice.correctAnswers * 100 / practice.attempts } %
+***********************************
+`
+    console.log( summary )
+    
+    const wrongCount = practice.wrongAnswers.length
+    if (wrongCount) {
+        console.log(`Incorrect answers (${wrongCount}):`)
+        for (let eq of practice.wrongAnswers) {
+            console.log( practice.equationToString(eq) + ' = ' + practice.evaluateEquation(eq) )
+        }
+    }
+    process.exit(0)
+}
+
+function nextEquation() {
+    const eq = practice.createNextEquation()
+    if ( !eq ) finish()
+    console.log( formatEquation(eq) )
+}
+    
+const stdin = process.stdin
+//stdin.resume()
+//stdin.setEncoding("ascii")
+
+stdin.on("data", verify)
 nextEquation()
