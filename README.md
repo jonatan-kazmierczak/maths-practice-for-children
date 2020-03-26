@@ -11,7 +11,9 @@ The program requires the latest version of [Node.js](https://nodejs.org).
 
 ## Usage examples
 
-### Invocations
+### Sample invocations
+Invocations take place in a shell / command line.
+
 * addition of numbers up to 50 (maximum value is 50 + 50 = 100), 5 tries  
 ```
 node maths-practice.js 50 + 5
@@ -27,7 +29,7 @@ node maths-practice.js 100 - 10
 node maths-practice.js 10 "*" 5
 ```
 
-### Result
+### Sample result
 ```
   22
 + 49
