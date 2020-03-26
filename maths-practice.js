@@ -79,13 +79,8 @@ if ( !practice.isValid() ) usage()
 
 function verify(input) {
     if (! /\d+/.test( input )) return  // prevention from accidental pressing enter
-    let msg
     const ok = practice.validateAnswer( +input )
-    if (ok) {
-        msg = 'very good!'
-    } else {
-        msg = 'not good'
-    }
+    const msg = ok ? 'very good!' : 'not good';
     console.log(msg + '\n\n')
     
     nextEquation()
@@ -127,9 +122,5 @@ function nextEquation() {
     console.log( formatEquation(eq) )
 }
     
-const stdin = process.stdin
-//stdin.resume()
-//stdin.setEncoding("ascii")
-
-stdin.on("data", verify)
+process.stdin.on("data", verify)
 nextEquation()
