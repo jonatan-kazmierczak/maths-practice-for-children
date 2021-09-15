@@ -1,20 +1,20 @@
-# Mathematics practice program - primary school
+# Mathematics training for primary school
 
-The program helps children in the 1st class of primary school (and above) to develop, train and improve their skills in mathematics.
+This artificial intelligence (AI) solution helps children in the primary school to develop, train and improve their skills in mathematics.
 
 ## Info
-- current level: primary school, 1st class (and above)
+- level: primary school, 1st class and above
 - scope: addition, subtraction and multiplication of numbers within the given range
 
 ## Requirements
-The program requires the latest version of [Node.js](https://nodejs.org).
+The solution requires the latest version of [Node.js](https://nodejs.org).
 
 ## Usage examples
 
 ### Sample invocations
 Invocations take place in a shell / command line.
 
-* addition of numbers up to 50 (maximum value is 50 + 50 = 100), 5 tries  
+* addition of numbers up to 50 (maximum value is 50 + 50 = 100), 5 tries
 ```
 node maths-practice.js 50 + 5
 ```
@@ -29,7 +29,7 @@ node maths-practice.js 100 - 10
 node maths-practice.js 10 "*" 5
 ```
 
-### Sample result
+### Sample session
 ```
   22
 + 49
