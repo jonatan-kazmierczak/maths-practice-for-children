@@ -70,6 +70,7 @@ not good
 solved correctly: 4
 attempts:  5
 success rate: 80 %
+duration: 2:07.012 (m:ss.mmm)
 ***********************************
 
 Incorrect answers (1):
