@@ -30,7 +30,7 @@ class Practice {
         const p1 = Math.round( Math.random() * this.paramRange )
         const v2 = this.operator == '-' ? p1 : this.paramRange
         const p2 = Math.round( Math.random() * v2 )
-        const eq = { p1: p1, p2: p2 }
+        const eq = { p1, p2 }
         this.equations.push( eq )
         return eq
     }
@@ -53,7 +53,7 @@ class Practice {
     }
 }
 
-// ----
+// ---- Functions
 
 function usage() {
     const msg = `\
@@ -72,10 +72,6 @@ Sample values:
     console.error(msg)
     process.exit(1)
 }
-
-const args = process.argv.slice(2)
-const practice = new Practice( +args[0], args[1], +args[2] )
-if ( !practice.isValid() ) usage()
 
 function verify(input) {
     if (! /\d+/.test( input )) return  // prevention from accidental pressing enter
@@ -100,15 +96,16 @@ function finish() {
     const summary = `\
 ***********************************
 solved correctly: ${practice.correctAnswers}
-attempts:  ${practice.attempts}
-success rate: ${ practice.correctAnswers * 100 / practice.attempts } %
-***********************************
+attempts: ${practice.attempts}
+success rate: ${ practice.correctAnswers * 100 / practice.attempts } % \
 `
     console.log( summary )
+    console.timeEnd( 'duration' )
+    console.log( '***********************************' )
     
     const wrongCount = practice.wrongAnswers.length
     if (wrongCount) {
-        console.log(`Incorrect answers (${wrongCount}):`)
+        console.log( `Incorrect answers (${wrongCount}):` )
         for (let eq of practice.wrongAnswers) {
             console.log( practice.equationToString(eq) + ' = ' + practice.evaluateEquation(eq) )
         }
@@ -121,6 +118,12 @@ function nextEquation() {
     if ( !eq ) finish()
     console.log( formatEquation(eq) )
 }
-    
+
+// ---- Main part
+
+const args = process.argv.slice(2)
+const practice = new Practice( +args[0], args[1], +args[2] )
+if ( !practice.isValid() ) usage()
 process.stdin.on("data", verify)
 nextEquation()
+console.time( 'duration' )
