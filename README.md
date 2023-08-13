@@ -1,6 +1,5 @@
-# Mathematics training for primary school
-
-This artificial intelligence (AI) solution helps children in the primary school to develop, train and improve their skills in mathematics.
+# Mathematics training for primary school kids
+This solution helps primary school kids to develop, train and improve their skills in mathematics.
 
 ## Info
 - level: primary school, 1st class and above
